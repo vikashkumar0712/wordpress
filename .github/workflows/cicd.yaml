@@ -54,7 +54,8 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        args: -avz --delete --exclude '.git/' . /var/www/html
+        # args: -avz --delete --exclude '.git/' . /var/www/html
+        args: -a . /var/www/html
 
     - name: SSH into Server
       uses: appleboy/ssh-action@master
