@@ -45,6 +45,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set server IP
+      run: echo "SERVER_IP=${{ secrets.SERVER_IP }}" >> $GITHUB_ENV
+
     - name: Checkout Repository
       uses: actions/checkout@v2
 
@@ -53,8 +56,9 @@ jobs:
 
     - name: Deploy to Server
       run: |
-        rsync -avz --delete ./ user@${{ secrets.SERVER_USERNAME }}:/var/www/html/
-        ssh user@${{ secrets.SERVER_USERNAME }} 'sudo chown -R www-data:www-data /var/www/html/wordpress'
-        ssh user@${{ secrets.SERVER_USERNAME }} 'sudo systemctl restart nginx'
+        rsync -avz --delete ./ user@$SERVER_IP:/var/www/html/
+        ssh user@$SERVER_IP 'sudo chown -R www-data:www-data /var/www/html/wordpress'
+        ssh user@$SERVER_IP 'sudo systemctl restart nginx'
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
